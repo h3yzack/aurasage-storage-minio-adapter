@@ -1,0 +1,45 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+group = "io.aurasage"
+version = "0.0.1-SNAPSHOT"
+
+ext {
+    set('aurasageCoreVersion', '0.0.1-SNAPSHOT')
+}
+
+dependencies {
+    implementation platform('org.springframework.boot:spring-boot-dependencies:3.5.5')
+
+    compileOnly 'org.springframework.boot:spring-boot-autoconfigure'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:3.5.5'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+
+    implementation 'software.amazon.awssdk:s3:2.34.5'
+
+    implementation "io.aurasage:aurasage-core:${aurasageCoreVersion}"
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

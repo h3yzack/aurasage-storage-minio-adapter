@@ -1,0 +1,3 @@
+rootProject.name = 'aurasage-storage-minio-adapter'
+
+includeBuild('../aurasage-core')
