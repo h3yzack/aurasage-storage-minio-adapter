@@ -16,7 +16,7 @@ Add dependency to your project:
 
 ```gradle
 dependencies {
-    implementation 'io.aurasage:aurasage-storage-minio-adapter:0.0.1-SNAPSHOT'
+    implementation 'io.aurasage:aurasage-storage-minio-adapter:<version>'
 }
 ```
 

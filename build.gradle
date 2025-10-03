@@ -2,19 +2,17 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'io.spring.dependency-management' version '1.1.7'
+    id("pl.allegro.tech.build.axion-release") version "1.20.1"
 }
 
 repositories {
     mavenCentral()
-    mavenLocal()
+    maven { url = 'https://jitpack.io' }
 }
 
 group = "io.aurasage"
-version = "0.0.1-SNAPSHOT"
+version = scmVersion.version
 
-ext {
-    set('aurasageCoreVersion', '0.0.1-SNAPSHOT')
-}
 
 dependencies {
     implementation platform('org.springframework.boot:spring-boot-dependencies:3.5.5')
@@ -28,7 +26,7 @@ dependencies {
 
     implementation 'software.amazon.awssdk:s3:2.34.5'
 
-    implementation "io.aurasage:aurasage-core:${aurasageCoreVersion}"
+    implementation "com.github.h3yzack:aurasage-core:v0.1.0-alpha"
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
@@ -42,4 +40,34 @@ java {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// Add publishing configuration
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            
+            // Optional: customize the published artifact details
+            groupId = project.group
+            artifactId = 'aurasage-storage-minio-adapter'
+            version = project.version
+            
+            pom {
+                name = 'Aurasage Storage MinIO Adapter'
+                description = 'MinIO adapter for Aurasage storage service'
+                
+                developers {
+                    developer {
+                        id = 'aurasage-team'
+                        name = 'Aurasage Development Team'
+                    }
+                }
+            }
+        }
+    }
+    
+    repositories {
+        mavenLocal()
+    }
 }
