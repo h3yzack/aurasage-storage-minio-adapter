@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
 
 import io.aurasage.storage.minio.service.MinioStorageService;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -20,7 +19,6 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 @AutoConfiguration
 @ConditionalOnClass({S3Client.class, S3Presigner.class})
 @EnableConfigurationProperties(MinioProperties.class)
-@PropertySource("classpath:/defaults.properties")
 public class MinioStorageAutoConfiguration {
 
     /**
@@ -48,7 +46,7 @@ public class MinioStorageAutoConfiguration {
     @ConditionalOnMissingBean
     public S3Presigner minioS3Presigner(MinioProperties minioProperties) {
         return S3Presigner.builder()
-                .endpointOverride(URI.create(minioProperties.getUrl()))
+                .endpointOverride(URI.create(minioProperties.getPublicUrl()))
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(minioProperties.getAccessKey(), minioProperties.getSecretKey())))
                 .region(Region.US_EAST_1)
