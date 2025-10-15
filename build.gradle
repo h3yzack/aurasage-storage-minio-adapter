@@ -5,37 +5,62 @@ plugins {
     id("pl.allegro.tech.build.axion-release") version "1.20.1"
 }
 
-repositories {
-    mavenCentral()
-    maven { url = 'https://jitpack.io' }
-}
-
-group = "io.aurasage"
+group = "io.github.h3yzack"
 version = scmVersion.version
 
+repositories {
+    mavenLocal()
+    maven { url = 'https://jitpack.io' }
+    mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/h3yzack/*")
+        credentials {
+            username = System.getenv("GITHUB_ACTOR") ?: project.findProperty("gpr.user") as String
+            password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.key") as String
+        }
+    }
+}
+
+ext{
+    aurasageVersion = "1.0.0"
+}
 
 dependencies {
-    implementation platform('org.springframework.boot:spring-boot-dependencies:3.5.5')
+
+    implementation platform("io.github.h3yzack:aurasage-dependencies:${aurasageVersion}")
 
     compileOnly 'org.springframework.boot:spring-boot-autoconfigure'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:3.5.5'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    compileOnly 'org.projectlombok:lombok:1.18.32'
-    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    compileOnly "org.springframework:spring-webflux"
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
 
     implementation 'software.amazon.awssdk:s3:2.34.5'
 
-    implementation "com.github.h3yzack:aurasage-core:v0.1.0-alpha"
+    implementation "io.github.h3yzack:aurasage-core"
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 }
 
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.boot:spring-boot-dependencies:3.5.5'
+    }
+}
+
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
+    withSourcesJar()
+    withJavadocJar()
+}
+
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 tasks.named('test') {
@@ -48,7 +73,6 @@ publishing {
         maven(MavenPublication) {
             from components.java
             
-            // Optional: customize the published artifact details
             groupId = project.group
             artifactId = 'aurasage-storage-minio-adapter'
             version = project.version
@@ -59,8 +83,8 @@ publishing {
                 
                 developers {
                     developer {
-                        id = 'aurasage-team'
-                        name = 'Aurasage Development Team'
+                        id = 'h3yzack'
+                        name = 'Zuhaimi A.'
                     }
                 }
             }
@@ -68,6 +92,13 @@ publishing {
     }
     
     repositories {
-        mavenLocal()
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/h3yzack/aurasage-storage-minio-adapter")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR") ?: project.findProperty("gpr.user") as String
+                password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.key") as String
+            }
+        }
     }
 }

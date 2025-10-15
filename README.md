@@ -16,7 +16,7 @@ Add dependency to your project:
 
 ```gradle
 dependencies {
-    implementation 'io.aurasage:aurasage-storage-minio-adapter:<version>'
+    implementation 'io.github.h3yzack:aurasage-storage-minio-adapter:<version>'
 }
 ```
 
@@ -35,6 +35,7 @@ The adapter provides default values that can be overridden:
 ```properties
 # MinIO server configuration
 aurasage.storage.minio.url=${MINIO_URL:http://localhost:9000}
+aurasage.storage.minio.public-url=${MINIO_PUBLIC_URL:http://localhost:9000}
 aurasage.storage.minio.access-key=${MINIO_ACCESS_KEY:aurasage}
 aurasage.storage.minio.secret-key=${MINIO_SECRET_KEY:devpassword}
 aurasage.storage.minio.bucket-name=${BUCKET_NAME:aurasage}
@@ -49,7 +50,8 @@ aurasage.storage.minio.bucket-name=${BUCKET_NAME:aurasage}
 
 ## Environment Variables
 
-- `MINIO_URL` - MinIO server endpoint (default: http://localhost:9000)
-- `MINIO_ACCESS_KEY` - MinIO access key (default: aurasage)
-- `MINIO_SECRET_KEY` - MinIO secret key (default: devpassword)
-- `BUCKET_NAME` - Storage bucket name (default: aurasage)
+- `MINIO_URL` - MinIO server endpoint 
+- `MINIO_PUBLIC_URL` - MinIO public URL
+- `MINIO_ACCESS_KEY` - MinIO access key 
+- `MINIO_SECRET_KEY` - MinIO secret key 
+- `BUCKET_NAME` - Storage bucket name 
